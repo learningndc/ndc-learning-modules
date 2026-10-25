@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modul L01 Interaktif</title>
+<meta name="description" content="Modul interaktif NDC Learning L01: Analisis Rutin Laboratorium Industri, untuk belajar mandiri mahasiswa Teknik Kimia.">
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#16202c;--muted:#5b6776;--line:#dde3ea;--brand:#0b2a5b;--brand2:#1673c9;--chip:#eef3f8;--ok:#1f8a4c;--okbg:#e7f6ec;--bad:#c0392b;--badbg:#fdecea;--warn:#f5b400;--tipbg:#fff8e1;--k3bg:#fdecea}
+@media (prefers-color-scheme:dark){:root{--bg:#0f141a;--card:#18202a;--ink:#e6edf3;--muted:#9aa7b4;--line:#2a3542;--brand:#8fc1ec;--brand2:#4a9ae0;--chip:#22303e;--ok:#4cc27e;--okbg:#14301f;--bad:#ff7b6b;--badbg:#3a1d1a;--tipbg:#33290c;--k3bg:#3a1d1a}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(135deg,#0b2a5b,#1673c9);color:#fff;padding:14px 16px}
+.topin{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.topin img{width:56px;height:56px;border-radius:50%;background:#fff;flex:none}
+.topin .t1{font-size:12px;opacity:.85;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+.topin .t2{font-size:clamp(17px,3vw,22px);font-weight:800;line-height:1.2}
+.prog{max-width:1200px;margin:10px auto 0;display:flex;align-items:center;gap:10px;font-size:13px}
+.prog .bar{flex:1;height:8px;background:rgba(255,255,255,.25);border-radius:8px;overflow:hidden}
+.prog .bar i{display:block;height:100%;width:0;background:#f5b400;transition:width .4s}
+.layout{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:270px 1fr;gap:20px;padding:20px 16px 60px}
+nav.side{position:sticky;top:12px;align-self:start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;max-height:calc(100vh - 24px);overflow:auto}
+nav.side button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:none;color:var(--ink);font:inherit;font-size:14px;padding:8px 10px;border-radius:8px;cursor:pointer}
+nav.side button:hover:not(:disabled){background:var(--chip)}
+nav.side button.on{background:var(--brand2);color:#fff}
+nav.side button:disabled{color:var(--muted);cursor:not-allowed;opacity:.6}
+nav.side .ic{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:12px;font-weight:700;border:2px solid currentColor}
+nav.side button.done .ic{background:var(--ok);border-color:var(--ok);color:#fff}
+.menuBtn{display:none}
+@media (max-width:860px){.layout{grid-template-columns:1fr}nav.side{position:fixed;inset:0 30% 0 0;z-index:40;border-radius:0;max-height:none;transform:translateX(-105%);transition:transform .25s}nav.side.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.45)}.menuBtn{display:inline-flex;margin-left:auto;background:#fff;color:#0b2a5b;border:0;border-radius:8px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer}}
+main section{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px clamp(16px,3vw,32px)}
+main section.on{display:block}
+h2{margin:0 0 4px;font-size:clamp(21px,3vw,26px);line-height:1.25}
+h3{margin:26px 0 8px;font-size:18px}
+.lead{color:var(--muted);margin:0 0 16px}
+.voice{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:99px;padding:7px 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;margin:6px 0 14px}
+.voice svg{width:18px;height:18px}
+.voice.playing{background:var(--warn);border-color:var(--warn);color:#1b1b1b}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--chip);font-weight:700}
+.tw{overflow-x:auto}
+.box{border-radius:10px;padding:12px 14px;margin:14px 0;border-left:5px solid}
+.tip{background:var(--tipbg);border-color:var(--warn)}
+.k3{background:var(--k3bg);border-color:var(--bad)}
+.ask{background:var(--chip);border-color:var(--brand2)}
+.formula{font-family:"Cambria Math","Times New Roman",serif;font-size:17px;background:var(--chip);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;white-space:nowrap}
+dfn{font-style:normal;border-bottom:2px dotted var(--brand2);cursor:help;color:inherit}
+#gpop{position:absolute;z-index:60;max-width:300px;background:var(--brand);color:#fff;padding:10px 12px;border-radius:8px;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.3);display:none}
+@media (prefers-color-scheme:dark){#gpop{color:#0f141a}}
+.quiz{margin-top:24px;border:2px solid var(--brand2);border-radius:12px;padding:16px}
+.quiz h4{margin:0 0 10px;font-size:16px;color:var(--brand2)}
+.q{margin-bottom:16px}
+.q p{margin:0 0 8px;font-weight:600}
+.opts{display:grid;gap:6px}
+.opt{text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:9px 12px;font:inherit;font-size:15px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--brand2)}
+.opt.right{background:var(--okbg);border-color:var(--ok)}
+.opt.wrong{background:var(--badbg);border-color:var(--bad)}
+.fb{margin-top:6px;font-size:14px;padding:8px 10px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.good{background:var(--okbg)}.fb.bad{background:var(--badbg)}
+.nextbar{display:flex;justify-content:space-between;gap:10px;margin-top:24px;flex-wrap:wrap;align-items:center}
+.btn{border:0;border-radius:8px;padding:10px 18px;font:inherit;font-weight:700;cursor:pointer;background:var(--brand2);color:#fff}
+.btn.sec{background:var(--chip);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.lockmsg{font-size:14px;color:var(--muted)}
+.calc{border:1px solid var(--line);border-radius:12px;padding:14px;margin:14px 0;background:var(--bg)}
+.calc .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.calc .tabs button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:5px 12px;font:inherit;font-size:13.5px;cursor:pointer}
+.calc .tabs button.on{background:var(--brand2);color:#fff;border-color:var(--brand2)}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+label.f{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:4px}
+input,select{font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);min-width:0}
+.out{margin-top:12px;background:var(--card);border-radius:8px;padding:10px 12px;border:1px solid var(--line);font-size:14.5px}
+.out b{color:var(--brand2);font-size:17px}
+details{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:8px 0;background:var(--card)}
+details summary{cursor:pointer;font-weight:700}
+.sim{display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:start}
+@media (max-width:640px){.sim{grid-template-columns:1fr}}
+.simsvg{width:100%;max-width:200px;margin:0 auto;display:block}
+.simctl{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.readout{font-size:15px;background:var(--chip);border-radius:8px;padding:10px 12px;margin:8px 0}
+.readout b{font-size:22px;color:var(--brand2)}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{padding:6px 0 6px 34px;position:relative}
+.steps li:before{counter-increment:s;content:counter(s);position:absolute;left:0;top:6px;width:24px;height:24px;border-radius:50%;background:var(--chip);display:grid;place-items:center;font-size:12px;font-weight:700}
+.steps li.ok:before{background:var(--ok);color:#fff;content:"✓"}
+.lk{border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}
+.lk h4{margin:0 0 6px}
+.lk .row{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-top:8px}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--chip);color:var(--muted)}
+.badge.ok{background:var(--okbg);color:var(--ok)}
+.timer{font-weight:800;font-size:18px;color:var(--brand2)}
+.score{font-size:42px;font-weight:800}
+canvas{max-width:100%;height:auto;border:1px solid var(--line);border-radius:8px;margin-top:12px}
+.choice{display:grid;gap:8px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:0 16px 30px}
+
+#intro{position:fixed;inset:0;z-index:100;overflow:auto;background:radial-gradient(circle at 20% 10%,#1f7fd6 0,#0b2a5b 55%,#06183a 100%);color:#fff;display:flex;padding:28px 16px}
+#intro.hide{display:none}
+.iw{max-width:760px;width:100%;margin:auto;text-align:center;animation:fu .6s ease}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.iw img{width:150px;height:150px;border-radius:50%;background:#fff;box-shadow:0 0 0 8px rgba(255,255,255,.12),0 10px 40px rgba(0,0,0,.4)}
+.iw .k{margin-top:18px;font-size:13px;letter-spacing:2px;font-weight:700;opacity:.85;text-transform:uppercase}
+.iw h1{margin:6px 0 4px;font-size:clamp(26px,5vw,40px);line-height:1.15}
+.iw .tag{color:#9fd0ff;font-weight:700;letter-spacing:3px;font-size:14px}
+.iw p.d{max-width:620px;margin:16px auto 0;opacity:.92;font-size:16px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0 8px;text-align:left}
+.cards div{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:12px 14px;font-size:14px}
+.cards b{display:block;font-size:15px;margin-bottom:2px;color:#ffd75e}
+.mod{background:#fff;color:#0b2a5b;border-radius:14px;padding:16px 18px;margin:18px 0;text-align:left}
+.mod .c{font-size:12px;font-weight:800;letter-spacing:1px;color:#1673c9}
+.mod .n{font-size:20px;font-weight:800;margin:2px 0 4px}
+.mod .m{font-size:14px;color:#3d4a5a}
+.ibtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.go{border:0;border-radius:99px;padding:15px 34px;font:inherit;font-size:18px;font-weight:800;cursor:pointer;background:#f5b400;color:#1b1b1b;box-shadow:0 6px 20px rgba(245,180,0,.4)}
+.go:hover{transform:translateY(-2px)}
+.ghost{border:2px solid rgba(255,255,255,.6);background:none;color:#fff;border-radius:99px;padding:13px 22px;font:inherit;font-weight:700;cursor:pointer}
+.ghost.playing{background:#fff;color:#0b2a5b}
+@media (max-width:600px){.cards{grid-template-columns:1fr}.iw img{width:110px;height:110px}}
+.iw small{display:block;margin-top:18px;opacity:.7;font-size:12.5px}
+</style>
+</head>
+<body>
+<div id="intro" role="dialog" aria-label="Pembukaan NDC Learning">
+<div class="iw">
+<img src="data:image/webp;base64,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" alt="Logo NDC Learning & Professional Community">
+<div class="k">Selamat datang di</div>
+<h1>NDC Learning &amp; Professional Community</h1>
+<div class="tag">LEARN · PRACTICE · GROW</div>
+<p class="d">NDC Learning menghubungkan ilmu di bangku kuliah dengan praktik nyata di dunia industri. Setiap modul dirancang agar Anda bisa belajar mandiri, berlatih langsung, dan siap bekerja.</p>
+<div class="cards">
+<div><b>Learn</b>Materi ringkas, jelas, dan dilengkapi panduan suara.</div>
+<div><b>Practice</b>Kalkulator, simulasi laboratorium, dan lembar kerja interaktif.</div>
+<div><b>Grow</b>Post-test dan sertifikat penyelesaian setelah lulus.</div>
+</div>
+<div class="mod"><div class="c">MODUL L01 · JALUR LABORATORIUM & ANALISIS</div><div class="n">Analisis Rutin Laboratorium Industri</div><div class="m">13 bagian · ± 8 jam belajar mandiri · Kuis di setiap bagian · Simulasi titrasi · Sertifikat</div></div>
+<div class="ibtns"><button class="go" id="enterBtn" type="button">Mulai Belajar →</button><button class="ghost" id="introVoice" type="button">Dengarkan pengantar</button></div>
+<small>Progres tersimpan otomatis di browser ini. Gunakan perangkat yang sama untuk melanjutkan.</small>
+</div></div>
+<header class="top">
+  <div class="topin">
+    <img src="data:image/webp;base64,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" alt="Logo NDC Learning">
+    <div><div class="t1">NDC Learning · Modul L01 · Belajar mandiri</div><div class="t2">Analisis Rutin Laboratorium Industri</div></div>
+    <button class="menuBtn" id="menuBtn" type="button">Daftar bagian</button>
+  </div>
+  <div class="prog"><span id="progTxt">0% selesai</span><div class="bar"><i id="progBar"></i></div></div>
+</header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Daftar bagian modul"></nav>
+<main id="main">
+
+<section data-id="s1" data-title="Pengantar & tujuan">
+<h2>Selamat datang di Modul L01</h2>
+<p class="lead">Belajar mandiri ± 8 jam. Kerjakan berurutan: bagian berikutnya terbuka setelah kuis cepat di bagian ini dijawab benar.</p>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<div class="tw"><table>
+<tr><th>Jalur</th><td>L — Laboratorium & Analisis</td></tr>
+<tr><th>Mata kuliah asal</th><td>Kimia Analisa (Teori & Praktikum)</td></tr>
+<tr><th>Sasaran</th><td>Mahasiswa D3/D4 Teknik Kimia semester 2 ke atas, calon analis/QC</td></tr>
+<tr><th>Prasyarat</th><td>Kimia Dasar: mol, reaksi asam-basa, reaksi pengendapan</td></tr>
+<tr><th>Lulus modul</th><td>Post-test ≥ 70 → sertifikat penyelesaian dapat diunduh</td></tr>
+</table></div>
+<h3>Setelah modul ini, Anda mampu:</h3>
+<ol>
+<li><b>Mengonversi</b> satuan konsentrasi lab (M, N, mg/L, ppm, %).</li>
+<li><b>Menjelaskan</b> peran lab dalam rantai bahan baku – proses – produk – limbah.</li>
+<li><b>Memilih</b> metode untuk 8 parameter analisis rutin beserta acuannya.</li>
+<li><b>Menghitung</b> hasil titrasi dan gravimetri, lalu membandingkannya dengan spesifikasi.</li>
+<li><b>Menilai</b> apakah hasil analisis dapat dipercaya (<dfn data-g="duplo">duplo</dfn>, <dfn data-g="recovery">recovery</dfn>) dan melaporkannya.</li>
+</ol>
+<h3>Cara memakai modul ini</h3>
+<ul>
+<li>Klik <b>Dengarkan bagian ini</b> untuk penjelasan suara.</li>
+<li>Kata bergaris titik-titik seperti <dfn data-g="titran">titran</dfn> bisa diklik untuk melihat artinya.</li>
+<li>Progres tersimpan otomatis di browser ini. Pakai perangkat dan browser yang sama untuk melanjutkan.</li>
+</ul>
+</section>
+
+<section data-id="s2" data-title="Pemantik">
+<h2>"Kenapa boilernya boros bahan bakar?"</h2>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<p>Sebuah pabrik makanan memakai boiler untuk menghasilkan steam. Dalam tiga bulan, konsumsi bahan bakarnya naik sekitar 8% padahal produksi tetap. Saat boiler dibuka, teknisi menemukan <b>kerak putih yang keras</b> di dalam pipanya.</p>
+<p>Kerak bekerja seperti selimut: panas sulit menembus ke air, jadi bahan bakar yang dibakar harus lebih banyak. Kalau dibiarkan, pipa bisa terlalu panas dan pecah.</p>
+<p>Penyebabnya: unit pelunak air (<dfn data-g="softener">softener</dfn>) lama tidak diregenerasi, sehingga kalsium dan magnesium lolos ke boiler. Masalah ini bisa diketahui sejak minggu pertama <b>seandainya analisis <dfn data-g="kesadahan">kesadahan</dfn> dilakukan rutin setiap shift</b>.</p>
+<div class="box ask"><b>Inti pekerjaan lab industri:</b> angka kecil di lembar hasil analisis menentukan keputusan besar di pabrik.</div>
+</section>
+
+<section data-id="s3" data-title="Satuan konsentrasi">
+<h2>Satuan konsentrasi</h2>
+<p class="lead">Satuan yang dipakai setiap hari di lab industri.</p>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<div class="tw"><table>
+<tr><th>Satuan</th><th>Arti</th><th>Dipakai untuk</th></tr>
+<tr><td>M (molar)</td><td>mol zat per liter larutan</td><td>Larutan pereaksi, misalnya EDTA 0,01 M</td></tr>
+<tr><td>N (normal)</td><td>ekivalen zat per liter larutan</td><td>Larutan asam-basa dan AgNO₃</td></tr>
+<tr><td>mg/L</td><td>miligram zat per liter sampel</td><td>Hasil analisis air dan limbah</td></tr>
+<tr><td>ppm</td><td>bagian per sejuta</td><td>Air: 1 ppm ≈ 1 mg/L (densitas air ≈ 1 kg/L)</td></tr>
+<tr><td>% b/b, % v/v</td><td>gram per 100 g, mL per 100 mL</td><td>Kadar air produk, kemurnian bahan baku</td></tr>
+<tr><td>mg CaCO₃/L</td><td>dinyatakan setara CaCO₃</td><td>Kesadahan dan alkalinitas</td></tr>
+</table></div>
+<p>Hubungan molaritas dan normalitas, dengan <i>n</i> = jumlah ekivalen per mol (H⁺/OH⁻ yang dilepas atau diterima, atau muatan ion):</p>
+<div class="formula">N = n × M</div>
+<div class="calc">
+<b>Coba sendiri: konversi M → N</b>
+<div class="fields" style="margin-top:8px">
+<label class="f">Molaritas (M)<input id="cvM" inputmode="decimal" value="0,05"></label>
+<label class="f">Zat<select id="cvN"><option value="1">HCl / NaOH (n = 1)</option><option value="2" selected>H₂SO₄ (n = 2)</option><option value="2">Ca(OH)₂ (n = 2)</option><option value="3">H₃PO₄ (n = 3)</option></select></label>
+</div>
+<div class="out" id="cvOut"></div>
+</div>
+</section>
+
+<section data-id="s4" data-title="Titrasi & standarisasi">
+<h2>Titrasi dan standarisasi</h2>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<p>Titrasi adalah menambahkan larutan yang konsentrasinya diketahui (<dfn data-g="titran">titran</dfn>) ke sampel sampai reaksinya tepat habis (<dfn data-g="titik akhir">titik akhir</dfn>), yang ditandai perubahan warna indikator.</p>
+<div class="formula">V<sub>titran</sub> × N<sub>titran</sub> = V<sub>sampel</sub> × N<sub>sampel</sub></div>
+<div class="tw"><table>
+<tr><th>Jenis</th><th>Reaksi</th><th>Contoh di industri</th><th>Indikator</th></tr>
+<tr><td>Asam-basa</td><td>H⁺ + OH⁻ → H₂O</td><td>Alkalinitas air, keasaman minyak</td><td>Fenolftalein, metil oranye</td></tr>
+<tr><td>Kompleksometri</td><td>Ca²⁺/Mg²⁺ + EDTA → kompleks</td><td>Kesadahan air boiler, cooling tower</td><td>Eriochrome Black T (EBT)</td></tr>
+<tr><td>Argentometri (Mohr)</td><td>Ag⁺ + Cl⁻ → AgCl↓</td><td>Klorida di air proses dan produk</td><td>Kalium kromat</td></tr>
+<tr><td>Redoks</td><td>transfer elektron</td><td>Oksigen terlarut, COD, besi</td><td>Amilum, ferroin</td></tr>
+</table></div>
+<h3>Standarisasi</h3>
+<p>Konsentrasi titran bisa berubah selama disimpan, jadi titran distandarisasi berkala dengan <dfn data-g="standar primer">standar primer</dfn>: Na₂CO₃ untuk HCl, KHP untuk NaOH, CaCO₃ untuk EDTA, NaCl untuk AgNO₃.</p>
+<div class="formula">N<sub>titran</sub> = m<sub>standar</sub> (mg) ÷ (BE<sub>standar</sub> × V<sub>titran</sub> mL)</div>
+<p><i>BE</i> = berat ekivalen = massa molar ÷ <i>n</i>.</p>
+</section>
+
+<section data-id="s5" data-title="Akurasi & presisi">
+<h2>Akurasi, presisi, dan kontrol mutu</h2>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<ul>
+<li><b>Akurasi</b>: seberapa dekat hasil dengan nilai sebenarnya. Dicek dengan larutan standar atau <dfn data-g="spike">spike</dfn>, dihitung sebagai % <dfn data-g="recovery">recovery</dfn>.</li>
+<li><b>Presisi</b>: seberapa dekat hasil ulangan satu sama lain. Dicek dengan <dfn data-g="duplo">duplo</dfn>, dihitung sebagai RPD.</li>
+<li><b><dfn data-g="blanko">Blanko</dfn></b>: analisis tanpa sampel, untuk mengoreksi pengaruh pereaksi.</li>
+</ul>
+<div class="formula">% recovery = (C<sub>sampel+spike</sub> − C<sub>sampel</sub>) ÷ C<sub>spike</sub> × 100%</div>
+<div class="formula">RPD = |x₁ − x₂| ÷ ((x₁ + x₂)/2) × 100%</div>
+<p>Patokan umum di banyak lab air: recovery 85–115% dan RPD ≤ 10%. Batas pastinya mengikuti prosedur lab masing-masing.</p>
+<div class="calc">
+<div class="tabs" data-calc="qc"><button class="on" data-t="rpd">RPD duplo</button><button data-t="rec">% recovery</button></div>
+<div data-p="rpd"><div class="fields"><label class="f">Hasil ulangan 1<input id="r1" inputmode="decimal" value="125,1"></label><label class="f">Hasil ulangan 2<input id="r2" inputmode="decimal" value="127,1"></label></div><div class="out" id="rpdOut"></div></div>
+<div data-p="rec" hidden><div class="fields"><label class="f">C sampel<input id="rc1" inputmode="decimal" value="61,0"></label><label class="f">C sampel + spike<input id="rc2" inputmode="decimal" value="79,6"></label><label class="f">C spike ditambahkan<input id="rc3" inputmode="decimal" value="20,0"></label></div><div class="out" id="recOut"></div></div>
+</div>
+<div class="box tip"><b>Tips lapangan:</b> Duplo yang jauh berbeda hampir selalu karena teknik: buret tidak dibilas, titik akhir terlewat, atau sampel tidak dikocok. Ulangi dulu sebelum melapor.</div>
+</section>
+
+<section data-id="s6" data-title="Peran lab di industri">
+<h2>Peran laboratorium di industri</h2>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<p>Laboratorium adalah "mata" pabrik. Instrumen menunjukkan suhu, tekanan, dan laju alir, tetapi <b>kualitas</b> bahan dan produk hanya diketahui dari analisis lab.</p>
+<div class="tw"><table>
+<tr><th>Titik</th><th>Pertanyaan yang dijawab</th><th>Contoh analisis</th></tr>
+<tr><td>Bahan baku</td><td>Sesuai spesifikasi pembelian?</td><td>Kemurnian, kadar air, densitas</td></tr>
+<tr><td>Proses</td><td>Proses berjalan normal?</td><td>pH, DHL, kesadahan air boiler dan cooling tower</td></tr>
+<tr><td>Produk</td><td>Boleh dikirim ke pelanggan?</td><td>Kadar air, kemurnian, <dfn data-g="coa">CoA</dfn></td></tr>
+<tr><td>Limbah</td><td>Memenuhi baku mutu?</td><td>pH, TSS, COD, minyak-lemak</td></tr>
+</table></div>
+<h3>Alur sebuah sampel</h3>
+<svg viewBox="0 0 760 410" role="img" aria-label="Alur sampel di laboratorium" style="width:100%;height:auto" font-size="13" font-family="inherit">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8a96a3"/></marker></defs>
+<g fill="none" stroke="#8a96a3" stroke-width="1.5">
+<path d="M164 120H188" marker-end="url(#ar)"/><path d="M324 120H348" marker-end="url(#ar)"/><path d="M484 120H532" marker-end="url(#ar)"/>
+<path d="M596 84V64H416V96" marker-end="url(#ar)"/><path d="M596 156V214" marker-end="url(#ar)"/><path d="M532 250H504" marker-end="url(#ar)"/>
+<path d="M596 286V336" marker-end="url(#ar)"/><path d="M504 360H96V144" marker-end="url(#ar)"/></g>
+<g stroke="#8a96a3" stroke-width="1.5" fill="var(--card)">
+<rect x="28" y="96" width="136" height="48" rx="8"/><rect x="188" y="96" width="136" height="48" rx="8"/><rect x="348" y="96" width="136" height="48" rx="8"/>
+<polygon points="532,120 596,84 660,120 596,156"/><polygon points="532,250 596,214 660,250 596,286"/>
+<rect x="504" y="336" width="184" height="48" rx="8"/></g>
+<rect x="328" y="226" width="176" height="48" rx="8" fill="#1673c9" fill-opacity=".15" stroke="#1673c9" stroke-width="2"/>
+<g fill="var(--ink)" text-anchor="middle"><text x="96" y="124">Sampling</text><text x="256" y="124">Preparasi sampel</text><text x="416" y="124">Analisis + duplo</text><text x="596" y="124">Lolos cek QC?</text><text x="596" y="254">Sesuai spek?</text><text x="416" y="254" font-weight="700">Lapor: proses lanjut</text><text x="596" y="364">Lapor + tindakan korektif</text></g>
+<g fill="var(--muted)" font-size="11.5"><text x="506" y="56" text-anchor="middle">tidak: ulangi analisis</text><text x="606" y="190">ya</text><text x="518" y="242" text-anchor="middle">ya</text><text x="606" y="316">tidak</text><text x="300" y="352" text-anchor="middle">sampling ulang setelah proses diperbaiki</text></g>
+</svg>
+<p>Hasil yang belum lolos cek mutu tidak boleh dilaporkan. Hasil di luar spesifikasi (<dfn data-g="off-spec">off-spec</dfn>) harus segera diteruskan ke operasi.</p>
+<div class="box k3"><b>K3:</b> Lab industri menangani asam pekat, basa kuat, dan larutan beracun seperti kromat. Pakai jas lab, kacamata, dan sarung tangan; tambahkan asam ke air, bukan sebaliknya; buang limbah kromat dan perak ke wadah khusus.</div>
+</section>
+
+<section data-id="s7" data-title="8 analisis rutin">
+<h2>Delapan analisis rutin</h2>
+<p class="lead">Dipakai setiap hari di hampir semua pabrik kimia. Klik setiap parameter untuk melihat prosedurnya.</p>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<div class="tw"><table>
+<tr><th>Parameter</th><th>Metode</th><th>Acuan</th><th>Mengapa penting</th></tr>
+<tr><td>pH</td><td>Elektrometri</td><td>APHA SM 4500-H⁺ B; SNI 6989.11</td><td>Asam → korosi; basa → kerak, busa</td></tr>
+<tr><td><dfn data-g="dhl">DHL</dfn> & TDS</td><td>Konduktometri; gravimetri 180 °C</td><td>APHA SM 2510 B, 2540 C</td><td>Ukuran cepat garam terlarut; dasar <dfn data-g="blowdown">blowdown</dfn></td></tr>
+<tr><td>Alkalinitas P & M</td><td>Titrasi asam-basa</td><td>APHA SM 2320 B</td><td>Kapasitas menetralkan asam</td></tr>
+<tr><td>Kesadahan total</td><td>Titrasi EDTA</td><td>APHA SM 2340 C</td><td>Penyebab utama kerak</td></tr>
+<tr><td>Klorida</td><td>Argentometri (Mohr)</td><td>APHA SM 4500-Cl⁻ B</td><td>Korosi sumuran pada baja tahan karat</td></tr>
+<tr><td>TSS</td><td>Gravimetri 103–105 °C</td><td>APHA SM 2540 D; SNI 6989.3</td><td>Parameter wajib limbah</td></tr>
+<tr><td>Kadar air</td><td>Oven atau Karl Fischer</td><td>KF: ASTM E203</td><td>Mutu dan umur simpan produk</td></tr>
+<tr><td>Densitas</td><td>Piknometer / hidrometer</td><td>Minyak bumi: ASTM D1298</td><td>Identitas bahan; konversi volume–massa</td></tr>
+</table></div>
+<p style="font-size:13.5px;color:var(--muted)">SNI seri 6989 (Air dan air limbah) diperbarui berkala; cek edisi terbaru di situs BSN.</p>
+<details><summary>1. pH</summary><ol><li>Kalibrasi pH meter dengan buffer pH 4, 7, dan 10.</li><li>Bilas elektroda dengan air suling, keringkan perlahan.</li><li>Celupkan ke sampel, tunggu stabil, catat pH dan suhu.</li></ol></details>
+<details><summary>2. DHL dan TDS</summary><ol><li>Kalibrasi konduktivitimeter dengan standar KCl.</li><li>Ukur sampel; catat DHL (µS/cm pada 25 °C).</li><li>TDS gravimetri: saring, uapkan filtrat, keringkan 180 °C, timbang residu. Di lapangan TDS sering diperkirakan ≈ 0,5–0,7 × DHL (faktor ditetapkan tiap lab).</li></ol></details>
+<details><summary>3. Alkalinitas P dan M</summary><ol><li>50–100 mL sampel + fenolftalein. Jika merah muda, titrasi dengan asam standar sampai tak berwarna (pH ≈ 8,3) → volume P.</li><li>Tambahkan metil oranye, lanjutkan sampai jingga (pH ≈ 4,5) → volume total M.</li></ol><div class="formula">Alkalinitas (mg CaCO₃/L) = V<sub>asam</sub> × N<sub>asam</sub> × 50 000 ÷ V<sub>sampel</sub></div></details>
+<details><summary>4. Kesadahan total</summary><ol><li>50 mL sampel + 1–2 mL buffer pH 10 + sedikit EBT (merah anggur).</li><li>Titrasi dengan EDTA standar sampai biru jernih.</li></ol><div class="formula">Kesadahan (mg CaCO₃/L) = V<sub>EDTA</sub> × M<sub>EDTA</sub> × 100 090 ÷ V<sub>sampel</sub></div></details>
+<details><summary>5. Klorida (Mohr)</summary><ol><li>100 mL sampel, pH 7–10, + 1 mL K₂CrO₄ (kuning).</li><li>Titrasi dengan AgNO₃ sampai endapan merah bata yang tidak hilang.</li><li>Lakukan titrasi blanko dengan air suling.</li></ol><div class="formula">Cl⁻ (mg/L) = (A − B) × N<sub>AgNO₃</sub> × 35 450 ÷ V<sub>sampel</sub></div><p>A = volume titrasi sampel, B = volume blanko (mL).</p></details>
+<details><summary>6. TSS</summary><ol><li>Kertas saring dioven 103–105 °C, didinginkan di desikator, ditimbang (W₁).</li><li>Saring sampel yang sudah dikocok rata.</li><li>Keringkan 103–105 °C, dinginkan, timbang (W₂) sampai bobot tetap.</li></ol><div class="formula">TSS (mg/L) = (W₂ − W₁) mg × 1000 ÷ V<sub>sampel</sub> mL</div></details>
+<details><summary>7. Kadar air (oven)</summary><ol><li>Timbang cawan kering, lalu cawan + sampel.</li><li>Keringkan (umumnya 105 °C) sampai bobot tetap.</li><li>Kadar air = bobot hilang ÷ bobot sampel × 100%. Untuk kadar sangat rendah, pakai Karl Fischer.</li></ol></details>
+<details><summary>8. Densitas (piknometer)</summary><ol><li>Timbang piknometer kosong, berisi air suling, lalu berisi sampel, pada suhu sama.</li><li>Berat jenis = massa sampel ÷ massa air pada volume sama.</li></ol></details>
+<h3>Kalkulator analisis</h3>
+<div class="calc">
+<div class="tabs" data-calc="an"><button class="on" data-t="kes">Kesadahan</button><button data-t="cl">Klorida</button><button data-t="alk">Alkalinitas</button><button data-t="tss">TSS</button><button data-t="ka">Kadar air</button></div>
+<div data-p="kes"><div class="fields"><label class="f">V EDTA (mL)<input data-k="kes" id="k1" inputmode="decimal" value="6,20"></label><label class="f">M EDTA<input data-k="kes" id="k2" inputmode="decimal" value="0,01008"></label><label class="f">V sampel (mL)<input data-k="kes" id="k3" inputmode="decimal" value="50"></label></div><div class="out" id="kesOut"></div></div>
+<div data-p="cl" hidden><div class="fields"><label class="f">A, V sampel titrasi (mL)<input id="c1" inputmode="decimal" value="12,40"></label><label class="f">B, V blanko (mL)<input id="c2" inputmode="decimal" value="0,20"></label><label class="f">N AgNO₃<input id="c3" inputmode="decimal" value="0,0141"></label><label class="f">V sampel (mL)<input id="c4" inputmode="decimal" value="100"></label></div><div class="out" id="clOut"></div></div>
+<div data-p="alk" hidden><div class="fields"><label class="f">V asam (mL)<input id="a1" inputmode="decimal" value="8,60"></label><label class="f">N asam<input id="a2" inputmode="decimal" value="0,0200"></label><label class="f">V sampel (mL)<input id="a3" inputmode="decimal" value="100"></label></div><div class="out" id="alkOut"></div></div>
+<div data-p="tss" hidden><div class="fields"><label class="f">W₁ kertas saring (g)<input id="t1" inputmode="decimal" value="0,1052"></label><label class="f">W₂ kertas + residu (g)<input id="t2" inputmode="decimal" value="0,1127"></label><label class="f">V sampel (mL)<input id="t3" inputmode="decimal" value="250"></label></div><div class="out" id="tssOut"></div></div>
+<div data-p="ka" hidden><div class="fields"><label class="f">Cawan kosong (g)<input id="w1" inputmode="decimal" value="28,4512"></label><label class="f">Cawan + sampel (g)<input id="w2" inputmode="decimal" value="33,4520"></label><label class="f">Setelah oven (g)<input id="w3" inputmode="decimal" value="33,4021"></label></div><div class="out" id="kaOut"></div></div>
+</div>
+<div class="box tip"><b>Hati-hati:</b> kesalahan paling sering bukan di rumus, tetapi di teknik: sampel tidak dikocok (TSS), titik akhir terlewat (kesadahan, klorida), pH meter tidak dikalibrasi.</div>
+</section>
+
+<section data-id="s8" data-title="Simulasi titrasi">
+<h2>Simulasi titrasi kesadahan</h2>
+<p class="lead">Lakukan titrasi virtual. Bagian ini selesai setelah Anda berhasil satu kali: titik akhir tepat dan hasil hitungan benar.</p>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<div class="sim">
+<svg class="simsvg" viewBox="0 0 200 360" aria-label="Buret dan labu erlenmeyer">
+<rect x="88" y="8" width="24" height="200" rx="4" fill="none" stroke="#8a96a3" stroke-width="2"/>
+<rect id="buretLiq" x="90" y="10" width="20" height="196" fill="#cfe3f7"/>
+<g stroke="#8a96a3" stroke-width="1">
+<line x1="88" y1="10" x2="80" y2="10"/><line x1="88" y1="49" x2="82" y2="49"/><line x1="88" y1="88" x2="80" y2="88"/><line x1="88" y1="127" x2="82" y2="127"/><line x1="88" y1="166" x2="80" y2="166"/><line x1="88" y1="205" x2="82" y2="205"/></g>
+<g font-size="9" fill="#8a96a3" text-anchor="end"><text x="78" y="13">0</text><text x="78" y="91">10</text><text x="78" y="169">20</text></g>
+<path d="M96 208h8v14l-3 10h-2l-3-10z" fill="#8a96a3"/>
+<circle id="drop" cx="100" cy="240" r="3" fill="#1673c9" opacity="0"/>
+<path d="M78 250h44v30l40 66H38l40-66z" fill="none" stroke="#8a96a3" stroke-width="2"/>
+<path id="flaskLiq" d="M57 310h86l19 36H38z" fill="#e8eef3"/>
+</svg>
+<div>
+<div class="fields">
+<label class="f">Sampel<select id="simSample"><option value="raw">Air baku sumur</option><option value="tap">Air keran</option><option value="soft">Air keluar softener</option><option value="ct">Air cooling tower (25 mL)</option></select></label>
+<label class="f">EDTA<input value="0,0100 M" disabled></label>
+</div>
+<ol class="steps" id="simSteps">
+<li id="st1">Pipet sampel ke labu erlenmeyer</li>
+<li id="st2">Tambahkan 1–2 mL buffer pH 10</li>
+<li id="st3">Tambahkan indikator EBT</li>
+<li id="st4">Titrasi sampai warna berubah menjadi biru jernih</li>
+<li id="st5">Catat volume, hitung kesadahan</li>
+</ol>
+<div class="simctl"><button class="btn sec" id="bPip" type="button">Pipet sampel</button><button class="btn sec" id="bBuf" type="button">+ Buffer pH 10</button><button class="btn sec" id="bEbt" type="button">+ Indikator EBT</button></div>
+<div class="simctl"><button class="btn" id="b1" type="button">+1 mL</button><button class="btn" id="b01" type="button">+0,1 mL</button><button class="btn" id="bDrop" type="button">+1 tetes (0,05 mL)</button><button class="btn sec" id="bReset" type="button">Ulang dari awal</button></div>
+<div class="readout">Volume EDTA terpakai: <b id="vRead">0,00</b> mL<br><span id="simMsg">Mulai dengan memipet sampel.</span></div>
+<div class="fields"><label class="f">Volume titik akhir yang Anda catat (mL)<input id="simV" inputmode="decimal"></label><label class="f">Kesadahan hasil hitungan (mg CaCO₃/L)<input id="simH" inputmode="decimal"></label></div>
+<p><button class="btn" id="simCheck" type="button">Periksa hasil saya</button></p>
+<div class="fb" id="simFb"></div>
+</div></div>
+</section>
+
+<section data-id="s9" data-title="Contoh soal">
+<h2>Contoh soal bertahap</h2>
+<p class="lead">Coba kerjakan dulu, lalu buka langkahnya satu per satu.</p>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<h3>Soal 1 — Standarisasi EDTA</h3>
+<p>0,2502 g CaCO₃ (Mr 100,09) dilarutkan menjadi 250,0 mL. 25,00 mL larutan ini dititrasi dan memerlukan 24,80 mL EDTA. Berapa molaritas EDTA?</p>
+<div class="reveal" data-steps='["mmol CaCO₃ total = 250,2 mg ÷ 100,09 = 2,4998 mmol","mmol dalam 25,00 mL = 2,4998 × 25,00/250,0 = 0,24998 mmol","Ca²⁺ : EDTA = 1 : 1 → mmol EDTA = 0,24998","M EDTA = 0,24998 ÷ 24,80 mL = <b>0,01008 M</b>"]'></div>
+<h3>Soal 2 — Kesadahan dan cek duplo</h3>
+<p>Sampel 50,00 mL, EDTA 0,01008 M, duplo 6,20 mL dan 6,30 mL. Hitung kesadahan dan nilai duplo (batas RPD ≤ 10%).</p>
+<div class="reveal" data-steps='["Ulangan 1 = 6,20 × 0,01008 × 100 090 ÷ 50,00 = 125,1 mg CaCO₃/L","Ulangan 2 = 6,30 × 0,01008 × 100 090 ÷ 50,00 = 127,1 mg CaCO₃/L","Rata-rata = 126,1; RPD = 2,0 ÷ 126,1 × 100% = 1,6% → diterima","Dilaporkan: <b>126 mg CaCO₃/L</b>. Air ini perlu dilunakkan sebelum masuk boiler."]'></div>
+<h3>Soal 3 — Klorida dan TSS limbah</h3>
+<p>Klorida: 100,0 mL sampel perlu 12,40 mL AgNO₃ 0,0141 N, blanko 0,20 mL. TSS: 250,0 mL disaring; kertas 0,1052 g, setelah kering 0,1127 g. Batas izin TSS (ilustrasi) 50 mg/L.</p>
+<div class="reveal" data-steps='["Cl⁻ = (12,40 − 0,20) × 0,0141 × 35 450 ÷ 100,0 = <b>61,0 mg/L</b>","Residu = 0,1127 − 0,1052 = 0,0075 g = 7,5 mg","TSS = 7,5 × 1000 ÷ 250,0 = <b>30 mg/L</b>","30 &lt; 50 mg/L → memenuhi batas"]'></div>
+<div class="box tip"><b>Tips lapangan:</b> tulis satuan di setiap baris hitungan. Banyak kesalahan laporan berasal dari mencampur g dan mg, atau mL dan L.</div>
+</section>
+
+<section data-id="s10" data-title="Studi kasus">
+<h2>Studi kasus: air umpan boiler off-spec</h2>
+<p class="lead">Lanjutan cerita di bagian Pemantik. Data ilustrasi.</p>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<p>Spesifikasi internal: kesadahan keluar softener <b>≤ 1 mg CaCO₃/L</b>; DHL air boiler <b>≤ 3 000 µS/cm</b>.</p>
+<div class="tw"><table>
+<tr><th>Hari</th><th>Kesadahan keluar softener (mg CaCO₃/L)</th><th>DHL air boiler (µS/cm)</th><th>pH air boiler</th><th>Catatan</th></tr>
+<tr><td>Senin</td><td>0,6</td><td>2 400</td><td>11,0</td><td>Normal</td></tr>
+<tr><td>Selasa</td><td>1,8</td><td>2 650</td><td>10,9</td><td>—</td></tr>
+<tr><td>Rabu</td><td>4,5</td><td>2 900</td><td>10,8</td><td>Regenerasi softener tertunda</td></tr>
+<tr><td>Kamis</td><td>9,1</td><td>3 350</td><td>10,6</td><td>Blowdown ditambah</td></tr>
+</table></div>
+<p>Jawab kuis di bawah dulu, lalu buka pembahasannya.</p>
+<details><summary>Pembahasan: analisis, keputusan, dan pelajaran</summary>
+<ol><li><b>Kesadahan</b> melewati spek sejak Selasa dan terus naik → resin softener jenuh, Ca²⁺/Mg²⁺ lolos ke boiler.</li><li><b>DHL</b> naik karena garam masuk bertambah → blowdown ditambah → energi terbuang.</li><li><b>pH</b> sedikit turun: alkalinitas terpakai bereaksi dengan ion penyebab kesadahan.</li><li>Sumber masalah: <b>softener</b>, bukan boiler.</li></ol>
+<p><b>Keputusan:</b> regenerasi softener segera; analisis kesadahan setiap shift sampai stabil; hasil off-spec dilaporkan hari itu juga ke supervisor; jadwal regenerasi berdasarkan volume air terolah.</p>
+<p><b>Pelajaran:</b> data lab bernilai jika dibandingkan dengan spek dan dilaporkan cepat; beberapa parameter saling menguatkan kesimpulan; analisis murah mencegah kerugian mahal.</p></details>
+</section>
+
+<section data-id="s11" data-title="Lembar kerja">
+<h2>Lembar kerja P1–P5</h2>
+<p class="lead">Dikoreksi otomatis. Jika salah, klik <b>Petunjuk</b>. Setelah dua kali salah, tombol <b>Lihat jawaban</b> muncul. Desimal boleh pakai koma.</p>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<div id="lkWrap"></div>
+<div class="box ask"><b>Tugas output (disarankan):</b> buat Laporan Hasil Analisis 1 halaman dari data studi kasus: identitas sampel, tabel hasil vs spesifikasi dan status, kontrol mutu (RPD/recovery), dan maksimal 3 kalimat rekomendasi.</div>
+</section>
+
+<section data-id="s12" data-title="Ringkasan & glosarium">
+<h2>Ringkasan dan glosarium</h2>
+<button class="voice" type="button">Dengarkan bagian ini</button>
+<h3>Lima poin kunci</h3>
+<ol><li>Lab adalah "mata" pabrik: mengawasi bahan baku, proses, produk, dan limbah.</li><li>Delapan analisis rutin dipakai di hampir semua industri kimia.</li><li>Titrasi bergantung pada titran terstandarisasi dan pembacaan titik akhir yang benar.</li><li>Hasil hanya dilaporkan setelah lolos cek mutu: duplo, recovery, blanko.</li><li>Nilai sebuah hasil ada pada perbandingan dengan spesifikasi dan kecepatan pelaporannya.</li></ol>
+<h3>Glosarium</h3>
+<div class="tw"><table id="glosTable"><tr><th>Istilah</th><th>Arti</th></tr></table></div>
+<h3>Referensi</h3>
+<ul style="font-size:14.5px"><li>APHA, AWWA, WEF. <i>Standard Methods for the Examination of Water and Wastewater</i>: 2320 B, 2340 C, 2510 B, 2540 C/D, 4500-Cl⁻ B, 4500-H⁺ B.</li><li>BSN. SNI seri 6989 <i>Air dan air limbah</i>.</li><li>ASTM E203 (Karl Fischer); ASTM D1298 (densitas produk minyak bumi).</li><li>Day & Underwood. <i>Analisis Kimia Kuantitatif</i>. Erlangga.</li><li>Harris, D.C. <i>Quantitative Chemical Analysis</i>. W.H. Freeman.</li></ul>
+</section>
+
+<section data-id="s13" data-title="Post-test & sertifikat">
+<h2>Post-test dan sertifikat</h2>
+<p class="lead">15 soal, 20 menit. Urutan soal dan pilihan diacak setiap kali. Nilai lulus ≥ 70.</p>
+<div id="ptStart"><p>Pastikan Anda sudah siap. Waktu berjalan begitu tes dimulai.</p><button class="btn" id="ptGo" type="button">Mulai post-test</button> <span id="ptBest" class="badge"></span></div>
+<div id="ptRun" hidden><p>Sisa waktu: <span class="timer" id="ptTimer">20:00</span></p><div id="ptQs"></div><button class="btn" id="ptSubmit" type="button">Kumpulkan jawaban</button></div>
+<div id="ptRes" hidden></div>
+<div id="cert" hidden>
+<h3>Unduh sertifikat penyelesaian</h3>
+<div class="fields"><label class="f">Nama lengkap (untuk sertifikat)<input id="cName" maxlength="60"></label><label class="f">Asal kampus (opsional)<input id="cCampus" maxlength="70"></label></div>
+<p><button class="btn" id="cMake" type="button">Buat sertifikat</button> <a class="btn sec" id="cDl" download="Sertifikat-NDC-L01.png" hidden>Unduh PNG</a></p>
+<canvas id="cCanvas" width="1600" height="1130" hidden></canvas>
+</div>
+</section>
+
+<div class="nextbar"><button class="btn sec" id="prevBtn" type="button">← Sebelumnya</button><span class="lockmsg" id="lockMsg"></span><button class="btn" id="nextBtn" type="button">Lanjut →</button></div>
+</main>
+</div>
+<footer>NDC Learning &amp; Professional Community · Learn · Practice · Grow<br>Data dalam modul ini adalah ilustrasi untuk pembelajaran.</footer>
+<div id="gpop" role="tooltip"></div>
+<img id="logoImg" src="data:image/webp;base64,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" alt="" hidden>
+<script>
+(function(){
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const num=v=>{const x=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));return isFinite(x)?x:NaN};
+const fmt=(x,d=2)=>isFinite(x)?x.toLocaleString('id-ID',{minimumFractionDigits:d,maximumFractionDigits:d}):'–';
+const KEY='ndc-l01-v1';let S={done:[],q:{},lk:{},best:null,cur:'s1',name:'',sim:false};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+
+/* ---------- Glosarium ---------- */
+const G={"titran":"Larutan yang konsentrasinya diketahui, dimasukkan dari buret ke sampel.","titik akhir":"Saat indikator berubah warna, tanda titrasi selesai.","standar primer":"Zat sangat murni dan stabil untuk menetapkan konsentrasi titran.","kesadahan":"Kandungan ion Ca²⁺ dan Mg²⁺ dalam air, dinyatakan sebagai mg CaCO₃/L.","duplo":"Analisis yang diulang dua kali pada sampel yang sama untuk menilai presisi.","recovery":"Persentase zat tambahan (spike) yang terukur kembali; ukuran akurasi.","spike":"Sejumlah zat yang sengaja ditambahkan ke sampel untuk menguji akurasi metode.","blanko":"Analisis tanpa sampel (air suling + pereaksi) untuk koreksi pengaruh pereaksi.","softener":"Unit penukar ion yang menghilangkan Ca²⁺ dan Mg²⁺ dari air; perlu diregenerasi dengan larutan garam.","coa":"Certificate of Analysis: dokumen hasil uji yang menyertai produk saat dikirim.","off-spec":"Hasil analisis di luar batas spesifikasi.","dhl":"Daya hantar listrik (konduktivitas): ukuran cepat jumlah garam terlarut, satuan µS/cm.","blowdown":"Pembuangan sebagian air boiler atau cooling tower untuk menurunkan kepekatan garam."};
+const pop=$('#gpop');let popFor=null;
+document.addEventListener('click',e=>{const d=e.target.closest('dfn');if(d){const t=G[d.dataset.g];if(!t)return;if(popFor===d){pop.style.display='none';popFor=null;return}
+ pop.textContent=t;pop.style.display='block';const r=d.getBoundingClientRect();let x=r.left+window.scrollX;x=Math.min(x,window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-12);pop.style.left=Math.max(8,x)+'px';pop.style.top=(r.bottom+window.scrollY+6)+'px';popFor=d;return}
+ if(!e.target.closest('#gpop')){pop.style.display='none';popFor=null}});
+const gt=$('#glosTable');Object.entries(G).forEach(([k,v])=>{const tr=document.createElement('tr');tr.innerHTML=`<td><b>${k==='coa'?'CoA':k==='dhl'?'DHL':k[0].toUpperCase()+k.slice(1)}</b></td><td>${v}</td>`;gt.appendChild(tr)});
+
+/* ---------- Kuis cepat per bagian ---------- */
+const QUIZ={
+s2:[{q:"Analisis rutin apa yang paling tepat untuk mendeteksi masalah softener lebih awal?",o:["Densitas air","Kesadahan air keluar softener","Kadar air bahan bakar","TSS air limbah"],a:1,w:"Softener bertugas menghilangkan Ca²⁺ dan Mg²⁺. Kalau kesadahan keluarannya naik, softener sudah jenuh."}],
+s3:[{q:"H₂SO₄ 0,05 M setara dengan berapa normal?",o:["0,025 N","0,05 N","0,10 N","0,20 N"],a:2,w:"H₂SO₄ melepas 2 H⁺, jadi N = 2 × 0,05 = 0,10 N."},{q:"Hasil kesadahan air biasanya dilaporkan dalam satuan…",o:["mg CaCO₃/L","µS/cm","% b/b","mg NaCl/L"],a:0,w:"Kesadahan dinyatakan setara CaCO₃ agar Ca²⁺ dan Mg²⁺ bisa dijumlahkan."}],
+s4:[{q:"Mengapa titran perlu distandarisasi secara berkala?",o:["Agar warnanya tetap","Karena konsentrasinya bisa berubah selama disimpan","Supaya titrasi lebih cepat","Agar tidak perlu blanko"],a:1,w:"Titran bisa menyerap CO₂, menguap, atau terurai, sehingga konsentrasinya bergeser."},{q:"Indikator pada titrasi klorida cara Mohr adalah…",o:["Fenolftalein","EBT","Kalium kromat","Metil oranye"],a:2,w:"K₂CrO₄ membentuk endapan merah bata Ag₂CrO₄ setelah semua Cl⁻ habis."}],
+s5:[{q:"Duplo 125,1 dan 127,1 mg/L. Berapa RPD-nya?",o:["0,8%","1,6%","2,0%","3,2%"],a:1,w:"|125,1 − 127,1| ÷ 126,1 × 100% = 1,6%."},{q:"Recovery spike hanya 70%. Artinya…",o:["Presisi buruk","Akurasi bermasalah; periksa metode, standar, atau gangguan matriks","Sampel terlalu encer","Hasil boleh langsung dilaporkan"],a:1,w:"Recovery di luar 85–115% menandakan hasil menyimpang dari nilai sebenarnya."}],
+s6:[{q:"Hasil analisis lolos QC tetapi di luar spesifikasi. Apa yang dilakukan lab?",o:["Mengulang sampai hasilnya masuk spek","Mencatat saja di logsheet","Segera melapor ke operasi agar ada tindakan korektif","Menunggu hasil besok"],a:2,w:"Hasil off-spec yang valid harus cepat diteruskan supaya proses diperbaiki."},{q:"CoA (Certificate of Analysis) adalah…",o:["Izin pembuangan limbah","Dokumen hasil uji yang menyertai produk","Sertifikat kalibrasi alat","Daftar bahan kimia lab"],a:1,w:"CoA menyertai produk saat dikirim sebagai bukti mutunya."}],
+s7:[{q:"Kertas saring untuk TSS dikeringkan pada suhu…",o:["60 °C","103–105 °C","180 °C","550 °C"],a:1,w:"TSS: 103–105 °C. Suhu 180 °C dipakai untuk TDS."},{q:"Titrasi kesadahan dengan EBT dilakukan pada pH…",o:["4","7","10","12"],a:2,w:"Buffer pH 10 membuat EDTA bereaksi sempurna dan EBT berubah warna dengan jelas."}],
+s9:[{q:"(12,40 − 0,20) × 0,0141 × 35 450 ÷ 100,0 = … mg Cl⁻/L",o:["30,5","61,0","122,0","6,10"],a:1,w:"12,20 × 0,0141 × 35 450 ÷ 100 = 61,0 mg/L."}],
+s10:[{q:"Sejak hari apa kesadahan keluar softener off-spec?",o:["Senin","Selasa","Rabu","Kamis"],a:1,w:"Selasa 1,8 mg/L sudah di atas batas 1 mg/L."},{q:"Apa sumber masalah utamanya?",o:["Boiler bocor","Resin softener jenuh karena regenerasi tertunda","Pembakaran kurang udara","pH meter rusak"],a:1,w:"Kesadahan naik di keluaran softener; DHL dan pH hanya ikut terdampak."}]
+};
+function buildQuiz(sec){const id=sec.dataset.id,qs=QUIZ[id];if(!qs)return;S.q[id]=S.q[id]||{};
+ const w=document.createElement('div');w.className='quiz';w.innerHTML='<h4>Kuis cepat — jawab benar untuk membuka bagian berikutnya</h4>';
+ qs.forEach((it,i)=>{const d=document.createElement('div');d.className='q';d.innerHTML=`<p>${i+1}. ${it.q}</p><div class="opts">${it.o.map((o,j)=>`<button type="button" class="opt" data-j="${j}">${String.fromCharCode(97+j)}. ${o}</button>`).join('')}</div><div class="fb"></div>`;
+  const fb=d.querySelector('.fb');
+  const mark=(j,silent)=>{const b=d.querySelectorAll('.opt');if(j===it.a){b.forEach(x=>x.disabled=true);b[j].classList.add('right');fb.className='fb show good';fb.innerHTML='<b>Benar.</b> '+it.w;S.q[id][i]=true}else{b[j].classList.add('wrong');b[j].disabled=true;fb.className='fb show bad';fb.innerHTML='<b>Belum tepat.</b> Baca lagi bagian di atas, lalu coba pilihan lain.'}
+   if(!silent){save();refresh()}};
+  d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>mark(+b.dataset.j));
+  if(S.q[id][i])mark(it.a,true);w.appendChild(d)});
+ sec.appendChild(w)}
+
+/* ---------- Navigasi & gating ---------- */
+const secs=$$('main section'),ids=secs.map(s=>s.dataset.id);
+secs.forEach(buildQuiz);
+function complete(id){
+ if(QUIZ[id])return QUIZ[id].every((_,i)=>S.q[id]&&S.q[id][i]);
+ if(id==='s8')return !!S.sim;
+ if(id==='s11')return LK.every(p=>S.lk[p.id]);
+ if(id==='s13')return S.best!==null&&S.best>=70;
+ return S.done.includes(id)}
+function unlocked(i){for(let k=0;k<i;k++)if(!complete(ids[k]))return false;return true}
+const side=$('#side');
+side.innerHTML=secs.map((s,i)=>`<button type="button" data-i="${i}"><span class="ic">${i+1}</span><span>${s.dataset.title}</span></button>`).join('');
+function show(id,scroll=true){const i=ids.indexOf(id);if(i<0||!unlocked(i))return;stopVoice();S.cur=id;
+ secs.forEach(s=>s.classList.toggle('on',s.dataset.id===id));if(!S.done.includes(id)&&!QUIZ[id]&&!['s8','s11','s13'].includes(id)){} save();refresh();side.classList.remove('open');if(scroll)window.scrollTo({top:0,behavior:'smooth'})}
+function refresh(){const i=ids.indexOf(S.cur);
+ side.querySelectorAll('button').forEach((b,k)=>{b.disabled=!unlocked(k);b.classList.toggle('on',k===i);b.classList.toggle('done',complete(ids[k]))});
+ const n=ids.filter(complete).length,p=Math.round(n/ids.length*100);$('#progBar').style.width=p+'%';$('#progTxt').textContent=p+'% selesai';
+ $('#prevBtn').disabled=i===0;const nb=$('#nextBtn'),lm=$('#lockMsg');
+ if(i===ids.length-1){nb.hidden=true;lm.textContent=complete(ids[i])?'Modul selesai. Selamat!':'';return}nb.hidden=false;
+ const needs=QUIZ[ids[i]]||['s8','s11'].includes(ids[i]);
+ if(needs&&!complete(ids[i])){nb.disabled=true;lm.textContent=ids[i]==='s8'?'Selesaikan simulasi untuk lanjut.':ids[i]==='s11'?'Selesaikan P1–P5 untuk lanjut.':'Jawab kuis cepat dengan benar untuk lanjut.'}else{nb.disabled=false;lm.textContent=''}}
+side.onclick=e=>{const b=e.target.closest('button');if(b)show(ids[+b.dataset.i])};
+$('#nextBtn').onclick=()=>{const i=ids.indexOf(S.cur);if(!S.done.includes(S.cur))S.done.push(S.cur);save();show(ids[i+1])};
+$('#prevBtn').onclick=()=>show(ids[ids.indexOf(S.cur)-1]);
+$('#menuBtn').onclick=e=>{e.stopPropagation();side.classList.toggle('open')};
+document.addEventListener('click',e=>{if(side.classList.contains('open')&&!e.target.closest('#side'))side.classList.remove('open')});
+
+/* ---------- Suara ---------- */
+const VO={
+s1:"Selamat datang di modul L01, Analisis Rutin Laboratorium Industri. Modul ini untuk belajar mandiri sekitar delapan jam. Kerjakan berurutan. Di akhir setiap bagian ada kuis cepat, dan bagian berikutnya baru terbuka setelah kuis dijawab benar. Kata yang bergaris titik-titik bisa diklik untuk melihat artinya. Di akhir modul ada post-test dan sertifikat.",
+s2:"Bayangkan sebuah boiler yang tiba-tiba boros bahan bakar. Ternyata ada kerak di dalam pipanya, karena softener tidak diregenerasi sehingga kalsium dan magnesium lolos. Masalah ini sebenarnya bisa ditangkap sejak awal dengan analisis kesadahan yang murah dan sederhana. Inilah inti pekerjaan lab industri: angka kecil menentukan keputusan besar.",
+s3:"Di lab industri, Anda akan sering bertemu satuan molar, normal, miligram per liter, ppm, persen, dan miligram kalsium karbonat per liter. Untuk air, satu ppm kira-kira sama dengan satu miligram per liter. Normalitas sama dengan jumlah ekivalen dikali molaritas. Coba kalkulator konversi di bawah tabel.",
+s4:"Titrasi berarti menambahkan larutan yang konsentrasinya diketahui sampai reaksi tepat habis, ditandai perubahan warna indikator. Ada titrasi asam basa, kompleksometri dengan EDTA, argentometri, dan redoks. Titran harus distandarisasi berkala dengan zat standar primer, karena konsentrasinya bisa berubah selama disimpan.",
+s5:"Hasil analisis harus akurat dan presisi. Akurasi dicek dengan persen recovery dari spike, patokannya delapan puluh lima sampai seratus lima belas persen. Presisi dicek dengan analisis duplo, dihitung sebagai RPD, patokannya paling besar sepuluh persen. Gunakan kalkulator untuk mencoba.",
+s6:"Laboratorium adalah mata pabrik. Lab mengawasi empat titik: bahan baku, proses, produk, dan limbah. Perhatikan diagram alur sampel. Ada dua titik keputusan: apakah hasil lolos cek mutu, dan apakah sesuai spesifikasi. Hasil di luar spesifikasi harus segera dilaporkan ke operasi.",
+s7:"Ada delapan analisis rutin: pH, daya hantar listrik dan TDS, alkalinitas, kesadahan, klorida, TSS, kadar air, dan densitas. Klik nama setiap parameter untuk membuka prosedurnya. Di bagian bawah ada kalkulator untuk menghitung hasilnya langkah demi langkah.",
+s8:"Sekarang Anda mencoba titrasi virtual. Ikuti urutannya: pipet sampel, tambahkan buffer pH sepuluh, lalu indikator EBT. Larutan akan berwarna merah anggur. Tambahkan EDTA sedikit demi sedikit. Saat mendekati titik akhir, pakai tombol satu tetes. Begitu warnanya berubah menjadi biru jernih, berhenti, catat volumenya, lalu hitung kesadahannya.",
+s9:"Bagian ini berisi tiga contoh soal. Coba kerjakan sendiri dulu di kertas, lalu buka langkah penyelesaiannya satu per satu untuk mencocokkan.",
+s10:"Ini studi kasus air umpan boiler. Perhatikan tabel data empat hari, bandingkan dengan spesifikasi, lalu jawab kuisnya. Setelah itu, buka pembahasan untuk melihat analisis, keputusan, dan pelajaran dari kasus ini.",
+s11:"Kerjakan lima soal lembar kerja. Jawaban Anda dikoreksi otomatis. Jika salah, gunakan tombol petunjuk. Setelah dua kali salah, Anda bisa melihat jawabannya.",
+s12:"Ini ringkasan lima poin kunci modul, glosarium istilah, dan daftar referensi. Baca sekali lagi sebelum mengerjakan post-test.",
+s13:"Ini post-test terakhir. Ada lima belas soal dengan waktu dua puluh menit. Nilai lulus tujuh puluh. Jika lulus, masukkan nama Anda untuk mengunduh sertifikat penyelesaian dari NDC Learning. Semoga sukses."};
+const SS=window.speechSynthesis;let voice=null,tok=0,playBtn=null;
+function pick(){if(!SS)return;const v=SS.getVoices();voice=v.find(x=>/^id/i.test(x.lang)&&/google/i.test(x.name))||v.find(x=>/^id/i.test(x.lang))||null}
+if(SS){pick();SS.onvoiceschanged=pick}
+function stopVoice(){tok++;if(SS)SS.cancel();if(playBtn){playBtn.classList.remove('playing');playBtn.lastChild.textContent=playBtn.dataset.lbl||'Dengarkan bagian ini';playBtn=null}}
+function speak(t,btn){if(!SS){alert('Browser ini tidak mendukung suara. Silakan baca teksnya.');return}stopVoice();const my=tok;if(!btn.dataset.lbl)btn.dataset.lbl=btn.lastChild.textContent;playBtn=btn;btn.classList.add('playing');btn.lastChild.textContent='Hentikan suara';
+ const parts=t.match(/[^.!?]+[.!?]*/g)||[t];let i=0;const nx=()=>{if(my!==tok)return;if(i>=parts.length){stopVoice();return}const u=new SpeechSynthesisUtterance(parts[i++].trim());u.lang='id-ID';if(voice)u.voice=voice;u.rate=.95;u.onend=nx;u.onerror=()=>{if(my===tok)stopVoice()};SS.speak(u)};nx()}
+$$('.voice').forEach(b=>{b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg><span>Dengarkan bagian ini</span>';
+ b.onclick=()=>{if(playBtn===b){stopVoice();return}speak(VO[b.closest('section').dataset.id],b)}});
+
+/* ---------- Kalkulator ---------- */
+$$('.calc .tabs').forEach(tb=>tb.onclick=e=>{const b=e.target.closest('button');if(!b)return;tb.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));tb.parentElement.querySelectorAll('[data-p]').forEach(p=>p.hidden=p.dataset.p!==b.dataset.t)});
+const v=id=>num($('#'+id).value);
+function calcAll(){
+ const M=v('cvM'),n=+$('#cvN').value;$('#cvOut').innerHTML=`N = ${n} × ${fmt(M,3)} = <b>${fmt(n*M,3)} N</b>`;
+ const r1=v('r1'),r2=v('r2'),rp=Math.abs(r1-r2)/((r1+r2)/2)*100;$('#rpdOut').innerHTML=`RPD = |${fmt(r1,1)} − ${fmt(r2,1)}| ÷ ${fmt((r1+r2)/2,2)} × 100% = <b>${fmt(rp,1)}%</b> → ${rp<=10?'<span style="color:var(--ok)">duplo diterima</span>':'<span style="color:var(--bad)">ulangi analisis</span>'}`;
+ const c1=v('rc1'),c2=v('rc2'),c3=v('rc3'),rc=(c2-c1)/c3*100;$('#recOut').innerHTML=`Recovery = (${fmt(c2,1)} − ${fmt(c1,1)}) ÷ ${fmt(c3,1)} × 100% = <b>${fmt(rc,0)}%</b> → ${rc>=85&&rc<=115?'<span style="color:var(--ok)">akurat</span>':'<span style="color:var(--bad)">periksa metode</span>'}`;
+ const k=v('k1')*v('k2')*100090/v('k3');$('#kesOut').innerHTML=`Kesadahan = ${fmt(v('k1'),2)} × ${fmt(v('k2'),5)} × 100 090 ÷ ${fmt(v('k3'),2)} = <b>${fmt(k,1)} mg CaCO₃/L</b>`;
+ const cl=(v('c1')-v('c2'))*v('c3')*35450/v('c4');$('#clOut').innerHTML=`Cl⁻ = (${fmt(v('c1'),2)} − ${fmt(v('c2'),2)}) × ${fmt(v('c3'),4)} × 35 450 ÷ ${fmt(v('c4'),1)} = <b>${fmt(cl,1)} mg/L</b>`;
+ const al=v('a1')*v('a2')*50000/v('a3');$('#alkOut').innerHTML=`Alkalinitas = ${fmt(v('a1'),2)} × ${fmt(v('a2'),4)} × 50 000 ÷ ${fmt(v('a3'),1)} = <b>${fmt(al,1)} mg CaCO₃/L</b>`;
+ const ts=(v('t2')-v('t1'))*1000*1000/v('t3');$('#tssOut').innerHTML=`Residu = ${fmt((v('t2')-v('t1'))*1000,1)} mg → TSS = ${fmt((v('t2')-v('t1'))*1000,1)} × 1000 ÷ ${fmt(v('t3'),1)} = <b>${fmt(ts,1)} mg/L</b>`;
+ const ka=(v('w2')-v('w3'))/(v('w2')-v('w1'))*100;$('#kaOut').innerHTML=`Kadar air = ${fmt(v('w2')-v('w3'),4)} g ÷ ${fmt(v('w2')-v('w1'),4)} g × 100% = <b>${fmt(ka,2)}%</b>`}
+$$('.calc input,.calc select').forEach(i=>i.addEventListener('input',calcAll));calcAll();
+
+/* ---------- Contoh soal bertahap ---------- */
+$$('.reveal').forEach(r=>{const st=JSON.parse(r.dataset.steps);let k=0;const ol=document.createElement('ol'),b=document.createElement('button');b.type='button';b.className='btn sec';b.textContent='Tampilkan langkah 1';
+ b.onclick=()=>{const li=document.createElement('li');li.innerHTML=st[k++];ol.appendChild(li);if(k>=st.length)b.remove();else b.textContent='Tampilkan langkah '+(k+1)};r.append(ol,b)});
+
+/* ---------- Simulasi titrasi ---------- */
+const SAMP={raw:{lo:110,hi:170,vs:50,name:'air baku sumur'},tap:{lo:40,hi:90,vs:50,name:'air keran'},soft:{lo:6,hi:14,vs:50,name:'air keluar softener'},ct:{lo:420,hi:620,vs:25,name:'air cooling tower'}};
+const ME=0.0100;let sim;
+function newSim(){const s=SAMP[$('#simSample').value];const H=s.lo+Math.random()*(s.hi-s.lo);sim={H,vs:s.vs,vEnd:H*s.vs/(ME*100090),vol:0,pip:false,buf:false,ebt:false,ended:false};
+ $$('#simSteps li').forEach(l=>l.classList.remove('ok'));$('#simV').value='';$('#simH').value='';$('#simFb').className='fb';drawSim();msg('Mulai dengan memipet '+s.vs+' mL '+s.name+'.')}
+const msg=t=>$('#simMsg').textContent=t;
+function color(){if(!sim.pip)return'#e8eef3';if(!sim.ebt)return'#eef4f8';const d=sim.vol-sim.vEnd;if(!sim.buf)return'#a0526e';if(d>=0)return'#2d6cdf';if(d>-0.15)return'#6b4fb0';return'#8b1e3f'}
+function drawSim(){const h=196*Math.max(0,1-sim.vol/25);const bl=$('#buretLiq');bl.setAttribute('y',10+196-h);bl.setAttribute('height',h);$('#flaskLiq').setAttribute('fill',color());$('#vRead').textContent=fmt(sim.vol,2)}
+function addV(x){if(!sim.pip){msg('Pipet sampel dulu ke labu erlenmeyer.');return}if(!sim.buf||!sim.ebt){msg('Tambahkan buffer pH 10 dan indikator EBT sebelum titrasi.');return}
+ const before=sim.vol<sim.vEnd;sim.vol=Math.round((sim.vol+x)*100)/100;if(sim.vol>25){sim.vol=25}const dr=$('#drop');dr.setAttribute('opacity',1);setTimeout(()=>dr.setAttribute('opacity',0),180);drawSim();
+ const d=sim.vol-sim.vEnd;if(before&&d>=0){$('#st4').classList.add('ok');msg('Warna berubah menjadi biru jernih! Berhenti dan catat volumenya.');sim.ended=true}
+ else if(d>=0.5)msg('Sudah lewat titik akhir cukup jauh (overtitrasi). Hasil Anda akan terlalu tinggi; sebaiknya ulangi.');
+ else if(d>-0.15&&d<0)msg('Warna mulai keunguan. Titik akhir sudah dekat, pakai tetes demi tetes!');
+ else if(d<0)msg('Masih merah anggur. Lanjutkan titrasi.')}
+$('#bPip').onclick=()=>{sim.pip=true;$('#st1').classList.add('ok');drawSim();msg('Sampel sudah di labu. Tambahkan buffer pH 10.')};
+$('#bBuf').onclick=()=>{if(!sim.pip)return msg('Pipet sampel dulu.');sim.buf=true;$('#st2').classList.add('ok');drawSim();msg(sim.ebt?'Siap dititrasi.':'Tambahkan indikator EBT.')};
+$('#bEbt').onclick=()=>{if(!sim.pip)return msg('Pipet sampel dulu.');sim.ebt=true;$('#st3').classList.add('ok');drawSim();msg(sim.buf?'Larutan merah anggur. Mulai titrasi dengan EDTA.':'Warnanya belum jelas karena pH belum diatur. Tambahkan buffer pH 10.')};
+$('#b1').onclick=()=>addV(1);$('#b01').onclick=()=>addV(0.1);$('#bDrop').onclick=()=>addV(0.05);$('#bReset').onclick=newSim;$('#simSample').onchange=newSim;
+$('#simCheck').onclick=()=>{const fb=$('#simFb'),V=num($('#simV').value),H=num($('#simH').value);const first=Math.ceil(sim.vEnd*20-1e-9)/20;let out=[],ok=true;
+ if(!sim.ended){ok=false;out.push('Titrasi belum mencapai titik akhir.')}
+ else if(!isFinite(V)||Math.abs(V-sim.vol)>0.011){ok=false;out.push('Volume yang dicatat harus sama dengan angka di buret ('+fmt(sim.vol,2)+' mL).')}
+ else if(sim.vol-first>0.16){ok=false;out.push('Titik akhir terlewat ('+fmt(sim.vol-first,2)+' mL lebih). Ulangi dan pakai tombol tetes saat warna mulai keunguan.')}
+ const Hc=V*ME*100090/sim.vs;if(ok){if(!isFinite(H)||Math.abs(H-Hc)/Hc>0.02){ok=false;out.push('Hitungan belum tepat. Pakai: V × 0,0100 × 100 090 ÷ '+sim.vs+'.')}}
+ if(ok){$('#st5').classList.add('ok');S.sim=true;save();refresh();fb.className='fb show good';fb.innerHTML=`<b>Berhasil!</b> Kesadahan ${SAMP[$('#simSample').value].name}: ${fmt(Hc,1)} mg CaCO₃/L (nilai sebenarnya dalam simulasi ${fmt(sim.H,1)}). Coba sampel lain untuk berlatih.`}
+ else{fb.className='fb show bad';fb.innerHTML='<b>Belum berhasil.</b> '+out.join(' ')}};
+newSim();
+
+/* ---------- Lembar kerja ---------- */
+const LK=[
+{id:'P1',t:'Standarisasi AgNO₃',q:'0,1170 g NaCl (Mr 58,44) dilarutkan menjadi 100,0 mL. 10,00 mL larutan dititrasi dengan AgNO₃, perlu 13,85 mL. Hitung normalitas AgNO₃.',f:[{l:'N AgNO₃',a:0.01446,tol:0.012,rel:true}],h:['Hitung mmol NaCl total: 117,0 mg ÷ 58,44.','mmol dalam 10 mL = mmol total × 10/100. Ag⁺ : Cl⁻ = 1 : 1.','N = mmol ÷ 13,85 mL.'],s:'117,0 ÷ 58,44 = 2,002 mmol → ×10/100 = 0,2002 mmol → ÷ 13,85 = <b>0,01446 N</b>'},
+{id:'P2',t:'Alkalinitas air baku',q:'100,0 mL sampel dititrasi H₂SO₄ 0,0200 N. Sampai titik akhir fenolftalein 1,20 mL; total sampai metil oranye 8,60 mL. Hitung alkalinitas P dan M.',f:[{l:'Alkalinitas P (mg CaCO₃/L)',a:12,tol:0.3},{l:'Alkalinitas M (mg CaCO₃/L)',a:86,tol:0.5}],h:['Rumus: V × N × 50 000 ÷ V sampel.','P memakai 1,20 mL; M memakai volume total 8,60 mL.'],s:'P = 1,20 × 0,0200 × 50 000 ÷ 100 = <b>12</b>; M = 8,60 × 0,0200 × 50 000 ÷ 100 = <b>86 mg CaCO₃/L</b>'},
+{id:'P3',t:'Kesadahan cooling tower (duplo)',q:'25,00 mL sampel, EDTA 0,01008 M, volume 14,90 mL dan 15,10 mL. Hitung kesadahan rata-rata dan RPD.',f:[{l:'Kesadahan rata-rata (mg CaCO₃/L)',a:605.35,tol:0.01,rel:true},{l:'RPD (%)',a:1.34,tol:0.2}],h:['Hitung masing-masing: V × 0,01008 × 100 090 ÷ 25,00.','RPD = selisih ÷ rata-rata × 100%.'],s:'601,3 dan 609,4 → rata-rata <b>605 mg CaCO₃/L</b>; RPD = 8,1 ÷ 605,4 × 100% = <b>1,3%</b> → diterima'},
+{id:'P4',t:'Kadar air pupuk',q:'Cawan kosong 28,4512 g; cawan + sampel 33,4520 g; setelah oven 33,4021 g. Spesifikasi maks. 1,0%. Hitung kadar air.',f:[{l:'Kadar air (%)',a:1.00,tol:0.02}],h:['Bobot sampel = 33,4520 − 28,4512.','Bobot hilang = 33,4520 − 33,4021. Kadar = hilang ÷ sampel × 100%.'],s:'0,0499 ÷ 5,0008 × 100% = <b>1,00%</b> → tepat di batas; sarankan analisis ulang sebelum produk dirilis'},
+{id:'P5',t:'Cek akurasi',q:'Klorida sampel 61,0 mg/L. Setelah di-spike 20,0 mg/L, hasilnya 79,6 mg/L. Hitung % recovery.',f:[{l:'Recovery (%)',a:93,tol:1}],h:['Recovery = (hasil spike − hasil sampel) ÷ jumlah spike × 100%.'],s:'(79,6 − 61,0) ÷ 20,0 × 100% = <b>93%</b> → akurat (85–115%)'}];
+const lkW=$('#lkWrap');
+LK.forEach(p=>{const d=document.createElement('div');d.className='lk';let tries=0,hi=0;
+ d.innerHTML=`<h4>${p.id} — ${p.t} <span class="badge" data-b></span></h4><p>${p.q}</p><div class="row">${p.f.map((f,i)=>`<label class="f">${f.l}<input inputmode="decimal" data-i="${i}"></label>`).join('')}<button class="btn" type="button" data-c>Periksa</button><button class="btn sec" type="button" data-h>Petunjuk</button><button class="btn sec" type="button" data-s hidden>Lihat jawaban</button></div><div class="fb"></div>`;
+ const fb=d.querySelector('.fb'),bd=d.querySelector('[data-b]');
+ const setDone=(how)=>{S.lk[p.id]=how;bd.textContent=how==='ok'?'Benar':'Selesai (lihat jawaban)';bd.className='badge ok';save();refresh()};
+ d.querySelector('[data-c]').onclick=()=>{const ok=p.f.every((f,i)=>{const x=num(d.querySelector(`[data-i="${i}"]`).value);return isFinite(x)&&(f.rel?Math.abs(x-f.a)/f.a<=f.tol:Math.abs(x-f.a)<=f.tol)});
+  if(ok){fb.className='fb show good';fb.innerHTML='<b>Benar!</b> '+p.s;setDone('ok')}else{tries++;fb.className='fb show bad';fb.innerHTML='<b>Belum tepat.</b> Periksa satuan dan pembulatan, atau klik Petunjuk.';if(tries>=2)d.querySelector('[data-s]').hidden=false}};
+ d.querySelector('[data-h]').onclick=()=>{fb.className='fb show';fb.style.background='var(--chip)';fb.innerHTML='<b>Petunjuk '+(Math.min(hi,p.h.length-1)+1)+':</b> '+p.h[Math.min(hi,p.h.length-1)];hi++};
+ d.querySelector('[data-s]').onclick=()=>{fb.className='fb show good';fb.style.background='';fb.innerHTML='<b>Jawaban:</b> '+p.s;setDone('lihat')};
+ if(S.lk[p.id]){bd.textContent=S.lk[p.id]==='ok'?'Benar':'Selesai (lihat jawaban)';bd.className='badge ok';fb.className='fb show good';fb.innerHTML='<b>Jawaban:</b> '+p.s}
+ lkW.appendChild(d)});
+
+/* ---------- Post-test ---------- */
+const PT=[
+["Syarat zat standar primer adalah…",["Murni, stabil, dan dapat ditimbang tepat","Berwarna terang","Larut dalam minyak","Mudah menyerap air"]],
+["H₂SO₄ 0,1 M setara dengan…",["0,2 N","0,05 N","0,1 N","0,4 N"]],
+["Fungsi buffer pH 10 pada titrasi kesadahan adalah…",["Membuat EDTA bereaksi sempurna dan indikator EBT bekerja","Mempercepat pengadukan","Mengendapkan kalsium","Menghilangkan klorida"]],
+["Perubahan warna di titik akhir titrasi kesadahan dengan EBT adalah…",["Merah anggur → biru","Kuning → merah bata","Tak berwarna → merah muda","Biru → kuning"]],
+["Titrasi blanko berguna untuk…",["Mengoreksi pengaruh pereaksi dan air suling","Menghitung presisi","Mengkalibrasi pH meter","Menggantikan standarisasi"]],
+["Ion penyebab utama kerak di boiler adalah…",["Ca²⁺ dan Mg²⁺","Na⁺ dan Cl⁻","K⁺ dan NO₃⁻","H⁺ dan OH⁻"]],
+["0,500 g NaOH (Mr 40) dilarutkan menjadi 250 mL. Molaritasnya…",["0,05 M","0,02 M","0,125 M","0,5 M"]],
+["50,00 mL sampel memerlukan 5,00 mL EDTA 0,0100 M. Kesadahannya…",["100 mg CaCO₃/L","50 mg CaCO₃/L","200 mg CaCO₃/L","500 mg CaCO₃/L"]],
+["100,0 mL sampel memerlukan 10,20 mL AgNO₃ 0,0141 N; blanko 0,20 mL. Kloridanya…",["50 mg/L","25 mg/L","100 mg/L","141 mg/L"]],
+["Residu TSS 6,0 mg dari 200 mL sampel. TSS-nya…",["30 mg/L","12 mg/L","60 mg/L","1 200 mg/L"]],
+["Hasil duplo 98 dan 102 mg/L. RPD-nya…",["4%","2%","8%","10%"]],
+["Sampel 40 mg/L di-spike 10 mg/L, hasilnya 46 mg/L. Recovery-nya…",["60%","86%","115%","46%"]],
+["Kesadahan keluar softener naik dari 0,5 menjadi 6 mg CaCO₃/L dalam dua hari. Tindakan pertama paling tepat…",["Memeriksa dan meregenerasi softener","Menambah blowdown saja","Mengganti boiler","Menurunkan pH air boiler"]],
+["Hasil duplo klorida 52 dan 71 mg/L. Analis sebaiknya…",["Mengulang analisis dan memeriksa teknik","Melaporkan rata-rata 61,5","Melaporkan nilai terkecil","Melaporkan nilai terbesar"]],
+["TSS limbah 85 mg/L, padahal batas izin 50 mg/L. Lab sebaiknya…",["Segera melapor ke supervisor IPAL dan sampling ulang setelah perbaikan","Menunggu hasil besok","Mengencerkan sampel agar lolos","Tidak mencatat hasil itu"]]];
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let run=null;
+const showBest=()=>{$('#ptBest').textContent=S.best===null?'':'Nilai terbaik: '+S.best;if(S.best!==null&&S.best>=70)$('#cert').hidden=false};showBest();
+$('#ptGo').onclick=()=>{const qs=shuf(PT.map((p,i)=>({i,q:p[0],o:shuf(p[1].map((t,j)=>({t,c:j===0})))})));run={qs,end:Date.now()+20*60000};
+ $('#ptQs').innerHTML=qs.map((q,k)=>`<div class="q"><p>${k+1}. ${q.q}</p><div class="choice">${q.o.map((o,j)=>`<label><input type="radio" name="pt${k}" value="${j}"> ${String.fromCharCode(97+j)}. ${o.t}</label>`).join('')}</div></div>`).join('');
+ $('#ptStart').hidden=true;$('#ptRes').hidden=true;$('#ptRun').hidden=false;tick();run.iv=setInterval(tick,1000)};
+function tick(){const s=Math.max(0,Math.round((run.end-Date.now())/1000));$('#ptTimer').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');if(s<=0)submit()}
+function submit(){if(!run)return;clearInterval(run.iv);let ok=0;const rev=run.qs.map((q,k)=>{const c=document.querySelector(`input[name="pt${k}"]:checked`);const j=c?+c.value:-1;const right=j>=0&&q.o[j].c;if(right)ok++;return `<li>${q.q}<br>${right?'<span style="color:var(--ok)">Benar</span>':'<span style="color:var(--bad)">'+(j<0?'Tidak dijawab':'Salah')+'</span> — jawaban: <b>'+q.o.find(o=>o.c).t+'</b>'}</li>`});
+ const sc=Math.round(ok/15*100);if(S.best===null||sc>S.best)S.best=sc;save();refresh();run=null;
+ $('#ptRun').hidden=true;$('#ptStart').hidden=false;$('#ptGo').textContent='Ulangi post-test';showBest();const res=$('#ptRes');res.hidden=false;
+ res.innerHTML=`<div class="score" style="color:${sc>=70?'var(--ok)':'var(--bad)'}">${sc}</div><p>${ok} dari 15 benar. ${sc>=70?'<b>Selamat, Anda lulus modul L01!</b> Silakan unduh sertifikat di bawah.':'Belum lulus. Pelajari lagi bagian yang salah, lalu ulangi post-test.'}</p><details><summary>Lihat pembahasan jawaban</summary><ol>${rev.join('')}</ol></details>`}
+$('#ptSubmit').onclick=()=>{if(confirm('Kumpulkan jawaban sekarang?'))submit()};
+
+/* ---------- Sertifikat ---------- */
+$('#cName').value=S.name||'';
+$('#cMake').onclick=()=>{const nm=$('#cName').value.trim();if(!nm){alert('Isi nama lengkap Anda.');return}S.name=nm;save();
+ const cv=$('#cCanvas'),x=cv.getContext('2d'),W=1600,H=1130;cv.hidden=false;
+ x.fillStyle='#ffffff';x.fillRect(0,0,W,H);x.strokeStyle='#0b2a5b';x.lineWidth=18;x.strokeRect(30,30,W-60,H-60);x.strokeStyle='#1673c9';x.lineWidth=4;x.strokeRect(62,62,W-124,H-124);
+ const lg=$('#logoImg');try{x.drawImage(lg,W/2-110,100,220,220)}catch(e){}
+ x.textAlign='center';x.fillStyle='#0b2a5b';x.font='bold 64px Georgia, serif';x.fillText('SERTIFIKAT PENYELESAIAN',W/2,410);
+ x.font='26px Arial';x.fillStyle='#5b6776';x.fillText('Diberikan kepada',W/2,475);
+ x.fillStyle='#16202c';let fs=72;do{x.font=`bold ${fs}px Georgia, serif`;fs-=4}while(x.measureText(nm).width>W-300&&fs>36);x.fillText(nm,W/2,570);
+ x.strokeStyle='#1673c9';x.lineWidth=2;x.beginPath();x.moveTo(W/2-420,595);x.lineTo(W/2+420,595);x.stroke();
+ const cp=$('#cCampus').value.trim();x.font='26px Arial';x.fillStyle='#5b6776';if(cp)x.fillText(cp,W/2,640);
+ x.fillStyle='#16202c';x.font='30px Arial';x.fillText('telah menyelesaikan modul belajar mandiri',W/2,cp?710:690);
+ x.font='bold 40px Arial';x.fillStyle='#0b2a5b';x.fillText('L01 — Analisis Rutin Laboratorium Industri',W/2,cp?770:750);
+ x.font='28px Arial';x.fillStyle='#16202c';const tg=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});x.fillText(`dengan nilai post-test ${S.best} · ${tg}`,W/2,cp?830:810);
+ x.font='bold 26px Arial';x.fillStyle='#0b2a5b';x.fillText('NDC Learning & Professional Community',W/2,960);x.font='22px Arial';x.fillStyle='#1673c9';x.fillText('LEARN · PRACTICE · GROW',W/2,996);
+ x.font='16px Arial';x.fillStyle='#8a96a3';x.fillText('Sertifikat penyelesaian mandiri, dibuat otomatis oleh modul interaktif NDC Learning',W/2,1050);
+ const a=$('#cDl');a.href=cv.toDataURL('image/png');a.download='Sertifikat-NDC-L01-'+nm.replace(/[^\w]+/g,'-')+'.png';a.hidden=false};
+
+
+/* ---------- Pembukaan ---------- */
+const intro=$('#intro');document.body.style.overflow='hidden';
+if(S.done.length||Object.values(S.q).some(o=>Object.keys(o).length)){$('#enterBtn').textContent='Lanjutkan Belajar →'}
+const IV="Selamat datang di NDC Learning and Professional Community. Learn, practice, grow. NDC Learning menghubungkan ilmu di bangku kuliah dengan praktik nyata di dunia industri. Anda akan mempelajari modul L01, Analisis Rutin Laboratorium Industri. Modul ini berisi tiga belas bagian, dengan kuis di setiap bagian, kalkulator, simulasi titrasi, lembar kerja, dan post-test. Jika lulus, Anda bisa mengunduh sertifikat. Klik tombol Mulai Belajar untuk masuk ke materi.";
+$('#introVoice').innerHTML='<span>Dengarkan pengantar</span>';
+$('#introVoice').onclick=function(){if(playBtn===this){stopVoice();return}speak(IV,this)};
+$('#enterBtn').onclick=()=>{stopVoice();intro.classList.add('hide');document.body.style.overflow='';window.scrollTo(0,0)};
+/* ---------- Mulai ---------- */
+if(!ids.includes(S.cur)||!unlocked(ids.indexOf(S.cur)))S.cur='s1';show(S.cur,false);
+})();
+</script>
+</body>
+</html>
